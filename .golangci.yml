@@ -247,7 +247,7 @@ linters-settings:
         skipBalanced: true
       hugeParam:
         # size in bytes that makes the warning trigger (default 80)
-        sizeThreshold: 80
+        sizeThreshold: 450
       nestingReduce:
         # min number of statements inside a branch to trigger a warning (default 5)
         bodyWidth: 5

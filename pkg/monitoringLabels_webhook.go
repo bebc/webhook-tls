@@ -11,7 +11,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// +kubebuilder:webhook:admissionReviewVersions=v1,sideEffects=None,path=/mutate,mutating=true,failurePolicy=fail,groups="",resources=pods,verbs=create;update,versions=v1,name=mpod.kb.io
+// +kubebuilder:webhook:admissionReviewVersions=v1,sideEffects=None,path=/mutate,mutating=true,
+// failurePolicy=fail,groups="",resources=pods,verbs=create;update,versions=v1,name=mpod.kb.io
 
 var (
 	defaultMonitoringUrl = "prometheus.io"

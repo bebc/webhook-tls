@@ -56,7 +56,9 @@ func (w *WebhookTls) checkTls() (*KeyPairArtifacts, bool, error) {
 	secret, err := w.ClientSet.CoreV1().Secrets(w.Namespace).Get(context.Background(), secretName, metav1.GetOptions{})
 	if err != nil && errors.IsNotFound(err) {
 		return nil, false, nil
-	} else if err != nil {
+	}
+
+	if err != nil {
 		return nil, true, err
 	}
 
@@ -79,13 +81,16 @@ func (w *WebhookTls) createSecret(cert []byte, key []byte) error {
 	}
 	_, err := w.ClientSet.CoreV1().Secrets(w.Namespace).Get(context.Background(), secretName, metav1.GetOptions{})
 	if err != nil && errors.IsNotFound(err) {
-		_, err := w.ClientSet.CoreV1().Secrets(w.Namespace).Create(context.Background(), secret, metav1.CreateOptions{})
+		_, err = w.ClientSet.CoreV1().Secrets(w.Namespace).Create(context.Background(), secret, metav1.CreateOptions{})
 		if err != nil {
 			return err
 		}
-	} else if err != nil {
+	}
+	if err != nil {
 		return err
-	} else {
+	}
+
+	{
 		_, err = w.ClientSet.CoreV1().Secrets(w.Namespace).Update(context.Background(), secret, metav1.UpdateOptions{})
 		if err != nil {
 			return err
@@ -97,7 +102,8 @@ func (w *WebhookTls) createSecret(cert []byte, key []byte) error {
 
 //更新webhookconfig caBundle字段
 func (w *WebhookTls) updateCaBundle(cert []byte) error {
-	MutatingWebhook, err := w.ClientSet.AdmissionregistrationV1().MutatingWebhookConfigurations().Get(context.Background(), webhookName, metav1.GetOptions{})
+	MutatingWebhook, err := w.ClientSet.AdmissionregistrationV1().MutatingWebhookConfigurations().
+		Get(context.Background(), webhookName, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
@@ -106,7 +112,8 @@ func (w *WebhookTls) updateCaBundle(cert []byte) error {
 		MutatingWebhook.Webhooks[i].ClientConfig.CABundle = cert
 	}
 
-	_, err = w.ClientSet.AdmissionregistrationV1().MutatingWebhookConfigurations().Update(context.Background(), MutatingWebhook, metav1.UpdateOptions{})
+	_, err = w.ClientSet.AdmissionregistrationV1().MutatingWebhookConfigurations().
+		Update(context.Background(), MutatingWebhook, metav1.UpdateOptions{})
 
 	if err != nil {
 		return err

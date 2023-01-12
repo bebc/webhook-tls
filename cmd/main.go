@@ -85,7 +85,8 @@ func main() {
 	}
 
 	mgr.GetWebhookServer().CertDir = certDir
-	mgr.GetWebhookServer().Register("/mutate", &webhook.Admission{Handler: &pkg.PodLabels{Client: mgr.GetClient(), Log: setupLog.WithName("webhook")}})
+	mgr.GetWebhookServer().Register("/mutate", &webhook.Admission{Handler: &pkg.PodLabels{Client: mgr.GetClient(),
+		Log: setupLog.WithName("webhook")}})
 
 	setupLog.Info("starting manager")
 

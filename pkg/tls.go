@@ -97,7 +97,9 @@ func (w *WebhookTls) createCACert() (*KeyPairArtifacts, error) {
 //创建服务器证书
 func (w *WebhookTls) createCertPEM() (*KeyPairArtifacts, error) {
 	ca, err := w.createCACert()
-
+	if err != nil {
+		return nil, err
+	}
 	begin := time.Now().Add(-1 * time.Hour)
 	end := begin.Add(certValidityDuration)
 	DNSName := fmt.Sprintf("%s.%s.svc", serviceName, w.Namespace)
@@ -139,7 +141,8 @@ func pemEncode(certificateDER []byte, key *rsa.PrivateKey) ([]byte, []byte, erro
 		return nil, nil, errors.Wrap(err, "encoding cert")
 	}
 	keyBuf := &bytes.Buffer{}
-	if err := pem.Encode(keyBuf, &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(key)}); err != nil {
+	if err := pem.Encode(keyBuf, &pem.Block{Type: "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(key)}); err != nil {
 		return nil, nil, errors.Wrap(err, "encoding key")
 	}
 	return certBuf.Bytes(), keyBuf.Bytes(), nil

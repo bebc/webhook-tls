@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-operator
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: monitoring-operator
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        app: monitoring-operator
+    spec:
+      containers:
+      - command:
+        - /manager
+        args:
+        - --leader-elect=false
+        - --namespace=monitoring
+        image: registry.cn-hangzhou.aliyuncs.com/bebc/monitoring-operator:v1
+        name: manager
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 400Mi
+          requests:
+            cpu: 10m
+            memory: 200Mi
+      serviceAccountName: monitoring-operator
+      terminationGracePeriodSeconds: 30
+

@@ -1,0 +1,35 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: monitoring-operator-mutating-webhook-config
+  labels:
+    app: webhook-admission-tls
+webhooks:
+- admissionReviewVersions:
+  - v1
+  objectSelector:
+    matchExpressions:
+    - key: monitoring.bebc.com/scrape
+      operator: In
+      values: ["true"]
+#  objectSelector:
+#    matchLabels:
+#      monitoring.bebc.com/scrape: "true"
+  clientConfig:
+    service:
+      name: monitoring-operator-service
+      namespace: monitoring
+      path: /mutate
+  name: monitoring.bebc.com
+  failurePolicy: Ignore
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+  sideEffects: None

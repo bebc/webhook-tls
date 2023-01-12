@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-example
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+        monitoring.bebc.com/scrape: "true"
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 500m
+            memory: 400Mi
+          requests:
+            cpu: 10m
+            memory: 200Mi
+      terminationGracePeriodSeconds: 30
+

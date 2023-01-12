@@ -1,0 +1,41 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: monitoring-operator-role
+rules:
+- apiGroups:
+  - ""
+  - "coordination.k8s.io"
+  - "apps"
+  resources:
+  - configmaps
+  - pods
+  - events
+  - secrets
+  - leases
+  - namespaces
+  - statefulsets
+  - deployments
+  verbs:
+  - "*"
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - validatingwebhookconfigurations
+  - mutatingwebhookconfigurations
+  verbs:
+  - list
+  - get
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - validatingwebhookconfigurations
+  - mutatingwebhookconfigurations
+  resourceNames:
+  - monitoring-operator-mutating-webhook-config
+  verbs:
+  - create
+  - delete
+  - patch
+  - update
+  - watch

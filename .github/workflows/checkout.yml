@@ -19,5 +19,4 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.50
-          working-directory:  /home/runner/work/webhook-tls/webhook-tls
           args: -c .golangci.yml

@@ -15,7 +15,7 @@ jobs:
         with:
           go-version: 1.18
       - name: Build
-          run: make build
+        run: make build
       - uses: actions/checkout@v3
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3

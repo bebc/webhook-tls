@@ -15,6 +15,8 @@ jobs:
         with:
           go-version: 1.18
       - uses: actions/checkout@v3
+      - name: test
+        run: go test -v ./...
       - name: golangci-lint
         run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b . latest
       - name: Lint

@@ -22,6 +22,7 @@ var (
 	enableLeaderElection bool
 	scheme               = runtime.NewScheme()
 	setupLog             = ctrl.Log.WithName("monitoring-controller")
+
 )
 
 func main() {
@@ -32,6 +33,7 @@ func main() {
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")
+	flag.BoolVar(&pkg.SelfSignedCa, "self-signed-ca", true, "generate a self-signed certificate")
 	opts := zap.Options{
 		Development: true,
 	}

@@ -19,6 +19,7 @@ var (
 	serviceName    = "monitoring-operator-service"
 	CAName         = "monitoring-operator-ca"
 	CAOrganization = "monitoring-operator"
+	SelfSignedCa   bool
 )
 
 const (

@@ -21,6 +21,7 @@ spec:
         args:
         - --leader-elect=false
         - --namespace=monitoring
+        - --self-signed-ca=false
         image: registry.cn-hangzhou.aliyuncs.com/bebc/monitoring-operator:v1
         name: manager
         imagePullPolicy: Always

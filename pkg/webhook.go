@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -25,7 +26,7 @@ func (w *WebhookTls) RunWebHookTls() error {
 		return err
 	}
 
-	if !secretExist {
+	if !secretExist && SelfSignedCa {
 		keyPair, err = w.createCertPEM()
 		if err != nil {
 			return err
@@ -37,15 +38,19 @@ func (w *WebhookTls) RunWebHookTls() error {
 		}
 
 	}
-
+	if !secretExist && !SelfSignedCa {
+		return fmt.Errorf("secret %v doesn't exist", secretName)
+	}
 	err = w.createTls(keyPair.CertPEM, keyPair.KeyPEM)
 	if err != nil {
 		return err
 	}
 
-	err = w.updateCaBundle(keyPair.CertPEM)
-	if err != nil {
-		return err
+	if SelfSignedCa {
+		err = w.updateCaBundle(keyPair.CertPEM)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
